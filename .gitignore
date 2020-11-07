@@ -344,8 +344,10 @@ $RECYCLE.BIN/
 pyvenv.cfg
 pip-selfcheck.json
 
+### TinyDb ###
+# Table files
+db/*.json
+
 # MISCELLANEOUS
-gui
-config.ini
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pycharm,python,macos,linux,windows,react

@@ -7,13 +7,15 @@ repos:
         language: system
         entry: pipenv run isort src/ test/
         types: [python]
+        pass_filenames: false
 
       - id: black
         name: black
         stages: [commit]
         language: system
-        entry: pipenv run black src/ test/
+        entry: pipenv run black --line-length 120 src/ test/
         types: [python]
+        pass_filenames: false
 
       - id: flake8
         name: flake8
@@ -21,6 +23,7 @@ repos:
         language: system
         entry: pipenv run flake8 src/ test/
         types: [python]
+        pass_filenames: false
 
       - id: mypy
         name: mypy
@@ -28,6 +31,7 @@ repos:
         language: system
         entry: pipenv run mypy src/ test/
         types: [python]
+        pass_filenames: false
 
       - id: pytest
         name: pytest
@@ -35,6 +39,7 @@ repos:
         language: system
         entry: pipenv run pytest test/
         types: [python]
+        pass_filenames: false
 
       - id: pytest-cov
         name: pytest
@@ -42,3 +47,4 @@ repos:
         language: system
         entry: pipenv run pytest --cov-report term-missing --cov=src/
         types: [python]
+        pass_filenames: false

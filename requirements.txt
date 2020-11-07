@@ -6,3 +6,6 @@ isort
 flake8
 mypy
 pre-commit
+discord.py
+tinydb
+configparser
