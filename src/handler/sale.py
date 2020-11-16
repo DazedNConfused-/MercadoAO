@@ -41,10 +41,6 @@ class SaleHandler(metaclass=Singleton):
         else:
             return Sale.from_dict(result)
 
-    def remove_sale_by_sale_uid(self, sale_uid: str):
-        sale = Query()
-        self._db.remove(sale["_sale_uid"] == sale_uid)
-
     def get_all_sales(self) -> List[Sale]:
         return self._parse_entities(self._db.all())
 
@@ -55,6 +51,14 @@ class SaleHandler(metaclass=Singleton):
     def get_sales_by_item_uids(self, item_uids: List[str]) -> List[Sale]:
         sale = Query()
         return self._parse_entities(self._db.search(sale["_item_uid"].one_of(item_uids)))
+
+    def remove_sale_by_sale_uid(self, sale_uid: str) -> int:
+        sale = Query()
+        return len(self._db.remove(sale["_sale_uid"] == sale_uid))
+
+    def remove_stale_sales(self) -> int:
+        sale = Query()
+        return len(self._db.remove(sale["_to_date_timestamp"] < datetime.today().timestamp()))
 
     @staticmethod
     def _parse_entities(entities: List[Dict]) -> List[Sale]:

@@ -1,6 +1,21 @@
 import logging
 from typing import Union
 
+# Add TRACE-level capabilities to custom logger
+# https://stackoverflow.com/a/13638084
+
+TRACE_LEVELV_NUM = 9
+logging.addLevelName(TRACE_LEVELV_NUM, "TRACE")
+
+
+def trace(self, message, *args, **kws):
+    if self.isEnabledFor(TRACE_LEVELV_NUM):
+        # Yes, logger takes its '*args' as 'args'.
+        self._log(TRACE_LEVELV_NUM, message, args, **kws)
+
+
+# define Logger(Factory) here:
+
 
 class Logger:
     @staticmethod
@@ -21,6 +36,9 @@ class Logger:
 
         # add ch to logger
         logger.addHandler(ch)
+
+        # add optional TRACE level to logger
+        logging.Logger.trace = trace  # type: ignore
 
         # return result
         return logger

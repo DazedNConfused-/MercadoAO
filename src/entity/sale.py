@@ -4,8 +4,9 @@ import uuid
 from datetime import datetime
 from typing import Dict
 
+from src.aux.typing import get_or_else_throw
 from src.entity.item import Item
-from src.handlers.item import ItemHandler
+from src.handler.item import ItemHandler
 
 
 class Sale:
@@ -68,7 +69,8 @@ class Sale:
 
     @property
     def item(self) -> Item:
-        return ItemHandler().uid_search(self._item_uid)  # type: ignore
+        # sale's item's UID is guaranteed to yield a valid result
+        return get_or_else_throw(ItemHandler().uid_search(self._item_uid))
 
     @staticmethod
     def from_dict(dic: Dict) -> Sale:

@@ -16,6 +16,6 @@ class MercadoAO(commands.Bot):
         self._logger.info("=== Initializing MercadoAO Discord Bot ===")
         # bot will be truly ready when the on_ready() function gets called
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         self._logger.debug("Logged on as {0}!".format(self.user))
         self._logger.info("=== MercadoAO initialized ===")

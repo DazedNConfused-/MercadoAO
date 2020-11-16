@@ -1,10 +1,16 @@
+import threading
 from threading import Lock
 from typing import Dict
+
+from src.aux.logger import Logger
 
 
 class Singleton(type):
     """
     A metaclass that creates a Singleton base class when called. This is a thread-safe implementation of Singleton.
+
+    This metaclass has been further customized to allow Singletons within Singletons, by implementing a double-lock
+    check mechanism (https://stackoverflow.com/a/59476524).
 
     A metaclass is the class of a class; that is, a class is an instance of its metaclass. You find the metaclass of
     an object in Python with type(obj). Normal new-style classes are of type type. Logger in the code above will be
@@ -37,31 +43,26 @@ class Singleton(type):
     https://stackoverflow.com/a/6798042
     """
 
-    _instances: Dict = {}
+    _logger = Logger.get_logger("Singleton")
 
-    _lock: Lock = Lock()
-    """
-    We now have a lock object that will be used to synchronize threads during
-    first access to the Singleton.
-    """
+    _instances: Dict = {}
+    _instance_locks: Dict = {}
+    _singleton_lock: Lock = threading.Lock()
 
     def __call__(cls, *args, **kwargs):
-        """
-        Possible changes to the value of the `__init__` argument do not affect
-        the returned instance.
-        """
-        # Now, imagine that the program has just been launched. Since there's no
-        # Singleton instance yet, multiple threads can simultaneously pass the
-        # previous conditional and reach this point almost at the same time. The
-        # first of them will acquire lock and will proceed further, while the
-        # rest will wait here.
-        with cls._lock:
-            # The first thread to acquire the lock, reaches this conditional,
-            # goes inside and creates the Singleton instance. Once it leaves the
-            # lock block, a thread that might have been waiting for the lock
-            # release may then enter this section. But since the Singleton field
-            # is already initialized, the thread won't create a new object.
-            if cls not in cls._instances:
-                instance = super().__call__(*args, **kwargs)
-                cls._instances[cls] = instance
+        # double-checked locking pattern
+        cls._logger.trace("Inside __call__ of Singleton...")
+        cls._logger.trace(f"Called By {cls}...")
+        if cls not in cls._instances:
+            cls._logger.trace("Trying to get lock...")
+            with cls._singleton_lock:
+                lock = cls._instance_locks.setdefault(cls, threading.Lock())
+            with lock:
+                cls._logger.trace("Got lock...")
+                if cls not in cls._instances:
+                    cls._logger.trace(f"Object of type {cls} being created...")
+                    cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+                    with cls._singleton_lock:
+                        del cls._instance_locks[cls]
+        cls._logger.trace(f"Returning created Instance {cls}")
         return cls._instances[cls]

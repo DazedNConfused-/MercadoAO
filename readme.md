@@ -4,6 +4,7 @@
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/DazedNConfused-/MercadoAO?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues/DazedNConfused-/MercadoAO?style=flat-square)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/DazedNConfused-/MercadoAO?style=flat-square)
+![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/DazedNConfused-/MercadoAO?style=flat-square)
 ![Travis (.com)](https://img.shields.io/travis/com/DazedNConfused-/MercadoAO?style=flat-square)
 
 ## Initial Setup

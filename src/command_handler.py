@@ -6,10 +6,12 @@ from discord import User
 from discord.ext.commands import Context
 
 from src.aux.logger import Logger
+from src.aux.typing import get_or_else_throw
 from src.entity.item import Item
 from src.entity.sale import Sale
-from src.handlers.item import ItemHandler
-from src.handlers.sale import SaleHandler
+from src.handler.item import ItemHandler
+from src.handler.sale import SaleHandler
+from src.scheduler.stale_offer_cleanup_job import StaleOfferCleanupJob
 
 
 class CommandHandler:
@@ -21,6 +23,9 @@ class CommandHandler:
         self._item_handler = ItemHandler()
         self._sale_handler = SaleHandler()
 
+        self._logger.info("Setting up background jobs...")
+        self._stale_offers_cleanup_scheduler = StaleOfferCleanupJob().start()
+
     async def sell_handler(
         self,
         ctx: Context,
@@ -29,7 +34,7 @@ class CommandHandler:
         price: int,
         announce: bool,
         announcement_channel_id: Optional[int],
-    ):
+    ) -> None:
         self._logger.debug(
             "[SELL] - [{}] command called by [{}] with arguments [{}] [{}] [{}]".format(
                 ctx.command, ctx.author, item_to_sell, quantity, price
@@ -38,7 +43,7 @@ class CommandHandler:
 
         item: Item
         if self._item_handler.is_uid(query=item_to_sell):
-            item = self._item_handler.uid_search(uid=item_to_sell)  # type: ignore
+            item = get_or_else_throw(self._item_handler.uid_search(uid=item_to_sell))
         else:
             search: Set[Item] = self._item_handler.search(search_param=item_to_sell)
             if len(search) != 1:
@@ -64,7 +69,7 @@ class CommandHandler:
         if announce and announcement_channel_id:
             await self.send_announcement(ctx, announcement_channel_id, str(sale))
 
-    async def buy_handler(self, ctx: Context, sale_uid: str):
+    async def buy_handler(self, ctx: Context, sale_uid: str) -> None:
         self._logger.debug(
             "[BUY] - [{}] command called by [{}] with argument [{}]".format(ctx.command, ctx.author, sale_uid)
         )
@@ -90,7 +95,7 @@ class CommandHandler:
         )
         self._sale_handler.remove_sale_by_sale_uid(sale.sale_uid)
 
-    async def list_all_handler(self, ctx: Context):
+    async def list_all_handler(self, ctx: Context) -> None:
         self._logger.debug("[LIST ALL] - [{}] command called by [{}]".format(ctx.command, ctx.author))
 
         search_results: List[Sale] = self._sale_handler.get_all_sales()
@@ -101,7 +106,7 @@ class CommandHandler:
             await ctx.author.send("The following sales are currently undergoing:")
             await self.send_partitioned_message(ctx.author, "\n".join(str(sale) for sale in search_results))
 
-    async def list_handler(self, ctx: Context, query: str):
+    async def list_handler(self, ctx: Context, query: str) -> None:
         self._logger.debug(
             "[LIST] - [{}] command called by [{}] with argument [{}]".format(ctx.command, ctx.author, query)
         )
@@ -121,7 +126,7 @@ class CommandHandler:
             await ctx.author.send("The following sales are currently undergoing for query [{}]:".format(query))
             await self.send_partitioned_message(ctx.author, "\n".join(str(sale) for sale in search_results))
 
-    async def search_handler(self, ctx: Context, query: str):
+    async def search_handler(self, ctx: Context, query: str) -> None:
         self._logger.debug(
             "[SEARCH] - [{}] command called by [{}] with argument [{}]".format(ctx.command, ctx.author, query)
         )
@@ -145,7 +150,7 @@ class CommandHandler:
                 ),
             )
 
-    async def search_uid_handler(self, ctx: Context, item_uid: str):
+    async def search_uid_handler(self, ctx: Context, item_uid: str) -> None:
         self._logger.debug(
             "[UID SEARCH] - [{}] command called by [{}] with argument [{}]".format(ctx.command, ctx.author, item_uid)
         )
@@ -164,7 +169,7 @@ class CommandHandler:
                 ),
             )
 
-    async def send_announcement(self, ctx: Context, channel_id: int, msg: str):
+    async def send_announcement(self, ctx: Context, channel_id: int, msg: str) -> None:
         """
         Sends a global announcement to the given channel
 
@@ -192,7 +197,7 @@ class CommandHandler:
         return ctx.bot.get_user(user_id)
 
     @staticmethod
-    async def send_partitioned_message(target: Context, msg: str, wrap_at=2000):
+    async def send_partitioned_message(target: Context, msg: str, wrap_at=2000) -> None:
         """
         Sends a message to Author/Channel, honoring Discord's maximum message length.
 

@@ -90,7 +90,9 @@ class ItemHandler(metaclass=Singleton):
 
         # execute search algorithm ---
 
-        full_match: Item = next((item for item in self._items if item.sanitized_name.__eq__(search_param)), None)  # type: ignore
+        full_match: Optional[Item] = next(
+            (item for item in self._items if item.sanitized_name.__eq__(search_param)), None
+        )
         if full_match is not None:
             return {full_match}  # if we got one full match, stop searching - save resources
 
