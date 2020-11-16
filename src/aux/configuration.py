@@ -1,5 +1,6 @@
 import configparser
 import os.path
+from distutils import util
 from typing import Any, Dict, Mapping, Optional
 
 CONFIGURATION_FILE = "config.ini"
@@ -8,6 +9,7 @@ DEFAULT_ROOT = "MERCADOAO"
 
 DISCORD_TOKEN_KEY = "discord_token"
 ANNOUNCEMENT_CHANNEL_ID_KEY = "announcement_channel_id"
+DEBUG_MODE_KEY = "debug_mode"
 
 
 class Configuration:
@@ -40,6 +42,10 @@ class Configuration:
             return int(self._config[DEFAULT_ROOT][ANNOUNCEMENT_CHANNEL_ID_KEY])
         else:
             return None
+
+    def is_debug(self) -> bool:
+        """Returns whether the application should run on debug mode or not."""
+        return bool(util.strtobool(self._config[DEFAULT_ROOT][DEBUG_MODE_KEY]))
 
     @staticmethod
     def build_defaults() -> Mapping[str, Mapping[str, Any]]:

@@ -43,7 +43,7 @@ class Singleton(type):
     https://stackoverflow.com/a/6798042
     """
 
-    _logger = Logger.get_logger("Singleton")
+    _logger = Logger("Singleton")
 
     _instances: Dict = {}
     _instance_locks: Dict = {}

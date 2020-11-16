@@ -1,22 +1,36 @@
+from typing import Callable
+
 from discord.ext.commands import Context
 
 from src.aux.configuration import Configuration
+from src.aux.debug import Debug
 from src.bot import MercadoAO
 from src.command_handler import CommandHandler
+from src.i18n.i18n import LOCALE_ES_AR, I18n
 
 # read parameters from configuration -----------------------------------------------------------------------------------
 
 configuration = Configuration()
+
+if configuration.is_debug():
+    Debug()
+
 if not configuration.get_discord_token():
     raise Exception("No Discord token defined in config.ini")
 
+# i18n support ---------------------------------------------------------------------------------------------------------
+
+i18n = I18n().with_lang(LOCALE_ES_AR).init()
+
+_: Callable[[str], str] = i18n.gettext
+
 # initialize bot -------------------------------------------------------------------------------------------------------
 
-version = "0.1 Alpha"
+version = "0.1.2 Beta"
 bot = MercadoAO(
     command_prefix="$",
     case_insensitive=True,
-    description="MercadoAO Bot - Version {}".format(version),
+    description="MercadoAO Bot - Version {} - https://github.com/DazedNConfused-/MercadoAO".format(version),
 )
 commandHandler = CommandHandler()
 
@@ -24,7 +38,7 @@ commandHandler = CommandHandler()
 
 
 @bot.command(name="buy")
-async def buy(ctx, sale_uid: str = None):
+async def buy(ctx: Context, sale_uid: str = None):
     """
     Claims an ongoing sale as a buyer, effectively ending it and notifying all parties with details of the transaction.
 
@@ -32,14 +46,14 @@ async def buy(ctx, sale_uid: str = None):
     """
 
     if not sale_uid:
-        await ctx.author.send("The Sale's UID is required in order to buy!")
+        await ctx.author.send(_("The Sale's UID is required in order to buy!"))
         return
 
     await commandHandler.buy_handler(ctx=ctx, sale_uid=sale_uid)
 
 
 @bot.command(name="sell")
-async def sell(ctx, item_to_sell: str = None, quantity: int = None, price: int = None):
+async def sell(ctx: Context, item_to_sell: str = None, quantity: int = None, price: int = None):
     """
     Publishes a sale. It will be listed on the market for a whole week.
 
@@ -50,7 +64,7 @@ async def sell(ctx, item_to_sell: str = None, quantity: int = None, price: int =
 
     if not item_to_sell or not quantity or not price:
         await ctx.author.send(
-            "All params ([item_to_sell] [quantity] [price]) must be specified in order to make a sale!"
+            _("All params ([item_to_sell] [quantity] [price]) must be specified in order to make a sale!")
         )
         return
 
@@ -97,7 +111,7 @@ async def search(ctx: Context, query: str = None):
     """
 
     if not query:
-        await ctx.author.send("You must specify something to search!")
+        await ctx.author.send(_("You must specify something to search!"))
         return
 
     await commandHandler.search_handler(ctx, query)
@@ -111,7 +125,7 @@ async def search_uid(ctx: Context, query: str = None):
     :param query: The UID to be searched.
     """
     if not query:
-        await ctx.author.send("You must specify something to search!")
+        await ctx.author.send(_("You must specify something to search!"))
         return
 
     await commandHandler.search_uid_handler(ctx, query)

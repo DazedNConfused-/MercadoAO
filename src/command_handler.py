@@ -1,6 +1,6 @@
 import textwrap
 import time
-from typing import List, Optional, Set
+from typing import Callable, List, Optional, Set
 
 from discord import User
 from discord.ext.commands import Context
@@ -11,13 +11,16 @@ from src.entity.item import Item
 from src.entity.sale import Sale
 from src.handler.item import ItemHandler
 from src.handler.sale import SaleHandler
+from src.i18n.i18n import I18n
 from src.scheduler.stale_offer_cleanup_job import StaleOfferCleanupJob
+
+_: Callable[[str], str] = lambda s: I18n().gettext(s)
 
 
 class CommandHandler:
     def __init__(self) -> None:
         super().__init__()
-        self._logger = Logger.get_logger(self.__class__.__name__)
+        self._logger = Logger(self.__class__.__name__)
 
         self._logger.info("Initializing command handler...")
         self._item_handler = ItemHandler()
@@ -49,9 +52,11 @@ class CommandHandler:
             if len(search) != 1:
                 await self.send_partitioned_message(
                     ctx.author,
-                    "Your sale of [{}] matched multiple items. "
-                    "Please make your offer again with a more specific argument (uid's are also accepted). "
-                    "Potential matches: {}".format(item_to_sell, set(map(lambda x: str(x), search))),
+                    _(
+                        "Your sale of [{}] matched multiple items. "
+                        "Please make your offer again with a more specific argument (uid's are also accepted). "
+                        "Potential matches: {}"
+                    ).format(item_to_sell, set(map(lambda x: str(x), search))),
                 )
                 return
             item = search.pop()
@@ -61,7 +66,7 @@ class CommandHandler:
         )
 
         await ctx.author.send(
-            "Your sale of [{}] units of [{}] for [{}] has been accepted and published".format(
+            _("Your sale of [{}] units of [{}] for [{}] has been accepted and published").format(
                 sale.quantity, item.name, sale.price
             )
         )
@@ -78,20 +83,26 @@ class CommandHandler:
 
         if not sale:
             await ctx.author.send(
-                "Your buy request for ID [{}] did not match any ongoing sales. Maybe it has been bought already? "
-                "Check ID and try again.".format(sale_uid)
+                _(
+                    "Your buy request for ID [{}] did not match any ongoing sales. Maybe it has been bought already? "
+                    "Check ID and try again."
+                ).format(sale_uid)
             )
             return
 
         buyer: User = ctx.author
         await ctx.author.send(
-            "Congratulations! You have bought [{}] units of [{}] for [{}]! "
-            "I have already DMed the seller [{}] with details of the transaction. "
-            "Message him to complete delivery.".format(sale.quantity, sale.item, sale.price, sale.seller)
+            _(
+                "Congratulations! You have bought [{}] units of [{}] for [{}]! "
+                "I have already DMed the seller [{}] with details of the transaction. "
+                "Message him to complete delivery."
+            ).format(sale.quantity, sale.item, sale.price, sale.seller)
         )
         await self.get_user_by_id(ctx, user_id=sale.seller_discord_id).send(
-            "Congratulations! Your sale of [{}] units of [{}] for [{}] has been bought by [{}]! "
-            "DM buyer to complete the transaction!".format(sale.quantity, sale.item, sale.price, buyer)
+            _(
+                "Congratulations! Your sale of [{}] units of [{}] for [{}] has been bought by [{}]! "
+                "DM buyer to complete the transaction!"
+            ).format(sale.quantity, sale.item, sale.price, buyer)
         )
         self._sale_handler.remove_sale_by_sale_uid(sale.sale_uid)
 
@@ -101,9 +112,9 @@ class CommandHandler:
         search_results: List[Sale] = self._sale_handler.get_all_sales()
 
         if not search_results:
-            await ctx.author.send("No sales currently going on")
+            await ctx.author.send(_("No sales currently going on"))
         else:
-            await ctx.author.send("The following sales are currently undergoing:")
+            await ctx.author.send(_("The following sales are currently undergoing:"))
             await self.send_partitioned_message(ctx.author, "\n".join(str(sale) for sale in search_results))
 
     async def list_handler(self, ctx: Context, query: str) -> None:
@@ -121,9 +132,9 @@ class CommandHandler:
             )
 
         if not search_results:
-            await ctx.author.send("No sales currently going on for query [{}]".format(query))
+            await ctx.author.send(_("No sales currently going on for query [{}]").format(query))
         else:
-            await ctx.author.send("The following sales are currently undergoing for query [{}]:".format(query))
+            await ctx.author.send(_("The following sales are currently undergoing for query [{}]:").format(query))
             await self.send_partitioned_message(ctx.author, "\n".join(str(sale) for sale in search_results))
 
     async def search_handler(self, ctx: Context, query: str) -> None:
@@ -141,11 +152,11 @@ class CommandHandler:
         end = time.time()
 
         if not search_results:
-            await ctx.author.send("Your search for ['{}'] awarded 0 results.".format(query))
+            await ctx.author.send(_("Your search for ['{}'] awarded 0 results.").format(query))
         else:
             await self.send_partitioned_message(
                 ctx.author,
-                "Your search for ['{}'] awarded {} and was completed in {} seconds.".format(
+                _("Your search for ['{}'] awarded {} and was completed in {} seconds.").format(
                     query, set(map(lambda x: str(x), search_results)), round(end - start, 4)
                 ),
             )
@@ -160,11 +171,11 @@ class CommandHandler:
         end = time.time()
 
         if not search_result:
-            await ctx.author.send("Your search for ['{}'] awarded 0 results.".format(item_uid))
+            await ctx.author.send(_("Your search for ['{}'] awarded 0 results.").format(item_uid))
         else:
             await self.send_partitioned_message(
                 ctx.author,
-                "Your search for ['{}'] awarded [{}] and was completed in {} seconds.".format(
+                _("Your search for ['{}'] awarded [{}] and was completed in {} seconds.").format(
                     item_uid, str(search_result), round(end - start, 4)
                 ),
             )

@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Dict
+from typing import Callable, Dict
 
 from src.aux.typing import get_or_else_throw
 from src.entity.item import Item
 from src.handler.item import ItemHandler
+from src.i18n.i18n import I18n
+
+_: Callable[[str], str] = lambda s: I18n().gettext(s)
 
 
 class Sale:
@@ -86,7 +89,9 @@ class Sale:
         )
 
     def __str__(self) -> str:
-        return "User [{}] offers [{}] units of item [{}] for [{}] coins, from [{}] until [{}]. Sale's UID: {}".format(
+        return _(
+            "User [{}] offers [{}] units of item [{}] for [{}] coins, from [{}] until [{}]. Sale's UID: {}"
+        ).format(
             self.seller,
             self.quantity,
             self.item.name,

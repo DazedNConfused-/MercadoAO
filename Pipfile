@@ -11,6 +11,7 @@ discord-py = "*"
 unidecode = "*"
 tinydb = "*"
 configparser = "*"
+pretty-errors = "*"
 
 [dev-packages]
 black = "*"
@@ -20,6 +21,7 @@ mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 pre-commit = "*"
+babel = "*"
 
 [pipenv]
 allow_prereleases = true

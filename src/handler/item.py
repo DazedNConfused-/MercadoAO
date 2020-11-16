@@ -13,7 +13,7 @@ class ItemHandler(metaclass=Singleton):
     def __init__(self) -> None:
         super().__init__()
 
-        self._logger = Logger.get_logger(self.__class__.__name__)
+        self._logger = Logger(self.__class__.__name__)
         self._logger.info("Initializing Item handler...")
 
         self._logger.info("Loading item list...")

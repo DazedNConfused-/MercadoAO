@@ -1,0 +1,98 @@
+# Spanish (Argentina) translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-11-16 13:53-0300\n"
+"PO-Revision-Date: 2020-11-16 13:58-0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es_AR\n"
+"Language-Team: es_AR <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: src/command_handler.py:55
+msgid ""
+"Your sale of [{}] matched multiple items. Please make your offer again "
+"with a more specific argument (uid's are also accepted). Potential "
+"matches: {}"
+msgstr "Tu venta de [{}] ha matcheado con múltiples ítems. Por favor, vuelve a hacer tu oferta con un argumento más específico (se acepta también el uso de UIDs para hacer la oferta). Potenciales matches: {}"
+
+#: src/command_handler.py:67
+msgid "Your sale of [{}] units of [{}] for [{}] has been accepted and published"
+msgstr "Tu venta de [{}] unidades de [{}] por [{}] ha sido aceptada y publicada"
+
+#: src/command_handler.py:84
+msgid ""
+"Your buy request for ID [{}] did not match any ongoing sales. Maybe it "
+"has been bought already? Check ID and try again."
+msgstr "Tu pedido de compra para el ID [{}] no ha matcheado ninguna venta en curso. Tal vez alguien ya haya concretado la compra, o el vendedor dió de baja la publicación. En caso contrario, checkea el ID y prueba nuevamente."
+
+#: src/command_handler.py:91
+msgid ""
+"Congratulations! You have bought [{}] units of [{}] for [{}]! I have "
+"already DMed the seller [{}] with details of the transaction. Message him"
+" to complete delivery."
+msgstr "¡Felicidades! Has comprado [{}] unidades de [{}] por [{}]! Ya le he enviado un mensaje privado al vendedor [{}] con detalles sobre la transacción. Mándale un mensaje tu también para acordar la entrega."
+
+#: src/command_handler.py:96
+msgid ""
+"Congratulations! Your sale of [{}] units of [{}] for [{}] has been bought"
+" by [{}]! DM buyer to complete the transaction!"
+msgstr "¡Felicidades! ¡Tu venta de [{}] unidades de [{}] por [{}] ha sido tomada por [{}]! Mándale un mensaje privado para completar la transacción."
+
+#: src/command_handler.py:107
+msgid "No sales currently going on"
+msgstr "No hay ventas activas en este momento"
+
+#: src/command_handler.py:109
+msgid "The following sales are currently undergoing:"
+msgstr "Las siguientes ventas se encuentran activas en este momento:"
+
+#: src/command_handler.py:127
+msgid "No sales currently going on for query [{}]"
+msgstr "No hay ventas activas para la búsqueda [{}]"
+
+#: src/command_handler.py:129
+msgid "The following sales are currently undergoing for query [{}]:"
+msgstr "Las siguientes ventas se encuentran activas en este momento para la búsqueda [{}]:"
+
+#: src/command_handler.py:147 src/command_handler.py:166
+msgid "Your search for ['{}'] awarded 0 results."
+msgstr "Tu búsqueda de ['{}'] ha tenido 0 resultados."
+
+#: src/command_handler.py:151
+msgid "Your search for ['{}'] awarded {} and was completed in {} seconds."
+msgstr "Tu búsqueda de ['{}'] ha retornado {} y fue completada en {} segundos."
+
+#: src/command_handler.py:170
+msgid "Your search for ['{}'] awarded [{}] and was completed in {} seconds."
+msgstr "Tu búsqueda por ['{}'] ha retornado [{}] y fue completada en {} segundos."
+
+#: src/main.py:47
+msgid "The Sale's UID is required in order to buy!"
+msgstr "¡La UID de la venta es necesaria para poder comprar!"
+
+#: src/main.py:64
+msgid ""
+"All params ([item_to_sell] [quantity] [price]) must be specified in order"
+" to make a sale!"
+msgstr "¡Todos los parámetros ([item_a_vender] [cantidad] [precio]) deben ser especificados para poder publicar una venta!"
+
+#: src/main.py:112 src/main.py:126
+msgid "You must specify something to search!"
+msgstr "¡Debes especificar algo para buscar!"
+
+#: src/entity/sale.py:92
+msgid ""
+"User [{}] offers [{}] units of item [{}] for [{}] coins, from [{}] until "
+"[{}]. Sale's UID: {}"
+msgstr "El usuario [{}] ofrece [{}] unidades de [{}] por [{}] monedas, desde el [{}] hasta el [{}]. UID de la venta: {}"
+

@@ -11,7 +11,7 @@ class MercadoAO(commands.Bot):
     def __init__(self, **options):
         super().__init__(**options)
 
-        self._logger = Logger.get_logger(self.__class__.__name__)
+        self._logger = Logger(self.__class__.__name__)
 
         self._logger.info("=== Initializing MercadoAO Discord Bot ===")
         # bot will be truly ready when the on_ready() function gets called

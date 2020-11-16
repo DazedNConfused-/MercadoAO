@@ -1,28 +1,13 @@
 import logging
 from typing import Union
 
-# Add TRACE-level capabilities to custom logger
-# https://stackoverflow.com/a/13638084
-
 TRACE_LEVELV_NUM = 9
 logging.addLevelName(TRACE_LEVELV_NUM, "TRACE")
 
 
-def trace(self, message, *args, **kws):
-    if self.isEnabledFor(TRACE_LEVELV_NUM):
-        # Yes, logger takes its '*args' as 'args'.
-        self._log(TRACE_LEVELV_NUM, message, args, **kws)
-
-
-# define Logger(Factory) here:
-
-
-class Logger:
-    @staticmethod
-    def get_logger(name: str = None, level: Union[int, str] = logging.DEBUG) -> logging.Logger:
-        # create logger
-        logger = logging.getLogger(name)
-        logger.setLevel(level)
+class Logger(logging.Logger):
+    def __init__(self, name: str, level: Union[int, str] = logging.DEBUG) -> None:
+        super().__init__(name, level)
 
         # create console handler and set level to debug
         ch = logging.StreamHandler()
@@ -35,10 +20,18 @@ class Logger:
         ch.setFormatter(formatter)
 
         # add ch to logger
-        logger.addHandler(ch)
+        self.addHandler(ch)
 
-        # add optional TRACE level to logger
-        logging.Logger.trace = trace  # type: ignore
+    def trace(self, message, *args, **kws) -> None:
+        """
+        Log a message with severity 'TRACE' on the root logger. If the logger has
+        no handlers, call basicConfig() to add a console handler with a pre-defined
+        format.
+        """
 
-        # return result
-        return logger
+        # Add TRACE-level capabilities to custom logger
+        # https://stackoverflow.com/a/13638084
+
+        if self.isEnabledFor(TRACE_LEVELV_NUM):
+            # yes, logger takes its '*args' as 'args'.
+            self._log(TRACE_LEVELV_NUM, message, args, **kws)

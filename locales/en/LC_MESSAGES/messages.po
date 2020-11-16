@@ -1,0 +1,98 @@
+# English translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-11-16 13:53-0300\n"
+"PO-Revision-Date: 2020-11-16 15:03-0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: src/command_handler.py:55
+msgid ""
+"Your sale of [{}] matched multiple items. Please make your offer again "
+"with a more specific argument (uid's are also accepted). Potential "
+"matches: {}"
+msgstr ""
+
+#: src/command_handler.py:67
+msgid "Your sale of [{}] units of [{}] for [{}] has been accepted and published"
+msgstr ""
+
+#: src/command_handler.py:84
+msgid ""
+"Your buy request for ID [{}] did not match any ongoing sales. Maybe it "
+"has been bought already? Check ID and try again."
+msgstr ""
+
+#: src/command_handler.py:91
+msgid ""
+"Congratulations! You have bought [{}] units of [{}] for [{}]! I have "
+"already DMed the seller [{}] with details of the transaction. Message him"
+" to complete delivery."
+msgstr ""
+
+#: src/command_handler.py:96
+msgid ""
+"Congratulations! Your sale of [{}] units of [{}] for [{}] has been bought"
+" by [{}]! DM buyer to complete the transaction!"
+msgstr ""
+
+#: src/command_handler.py:107
+msgid "No sales currently going on"
+msgstr ""
+
+#: src/command_handler.py:109
+msgid "The following sales are currently undergoing:"
+msgstr ""
+
+#: src/command_handler.py:127
+msgid "No sales currently going on for query [{}]"
+msgstr ""
+
+#: src/command_handler.py:129
+msgid "The following sales are currently undergoing for query [{}]:"
+msgstr ""
+
+#: src/command_handler.py:147 src/command_handler.py:166
+msgid "Your search for ['{}'] awarded 0 results."
+msgstr ""
+
+#: src/command_handler.py:151
+msgid "Your search for ['{}'] awarded {} and was completed in {} seconds."
+msgstr ""
+
+#: src/command_handler.py:170
+msgid "Your search for ['{}'] awarded [{}] and was completed in {} seconds."
+msgstr ""
+
+#: src/main.py:47
+msgid "The Sale's UID is required in order to buy!"
+msgstr ""
+
+#: src/main.py:64
+msgid ""
+"All params ([item_to_sell] [quantity] [price]) must be specified in order"
+" to make a sale!"
+msgstr ""
+
+#: src/main.py:112 src/main.py:126
+msgid "You must specify something to search!"
+msgstr ""
+
+#: src/entity/sale.py:92
+msgid ""
+"User [{}] offers [{}] units of item [{}] for [{}] coins, from [{}] until "
+"[{}]. Sale's UID: {}"
+msgstr ""
+
