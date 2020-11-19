@@ -1,8 +1,9 @@
 import threading
-from threading import Lock
 from typing import Dict
 
 from src.aux.logger import Logger
+
+Lock = threading.Lock
 
 
 class Singleton(type):
