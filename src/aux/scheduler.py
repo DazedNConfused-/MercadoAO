@@ -1,5 +1,6 @@
 import asyncio
-from asyncio import Task
+
+Task = asyncio.Task
 
 
 class Scheduler:

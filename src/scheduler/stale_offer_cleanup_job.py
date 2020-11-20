@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import asyncio
-from asyncio import Task
 
 from src.aux.logger import Logger
 from src.aux.singleton import Singleton
 from src.handler.sale import SaleHandler
+
+Task = asyncio.Task
 
 
 class StaleOfferCleanupJob(metaclass=Singleton):
